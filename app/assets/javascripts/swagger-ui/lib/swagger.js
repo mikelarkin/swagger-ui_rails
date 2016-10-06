@@ -222,6 +222,8 @@
     }
     if (response.basePath)
       this.basePath = response.basePath;
+    else if (this.url.indexOf('/') > 0)
+      this.basePath = this.url.substring(0, this.url.lastIndexOf('/')+1);
     else if (this.url.indexOf('?') > 0)
       this.basePath = this.url.substring(0, this.url.lastIndexOf('?'));
     else
@@ -1006,16 +1008,16 @@
       var param = params[i];
       if(param.paramType === 'query') {
         if (queryParams !== '')
-          queryParams += '&';    
+          queryParams += '&';
         if (Array.isArray(param)) {
-          var j;   
-          var output = '';   
-          for(j = 0; j < param.length; j++) {    
-            if(j > 0)    
-              output += ',';   
-            output += encodeURIComponent(param[j]);    
-          }    
-          queryParams += encodeURIComponent(param.name) + '=' + output;    
+          var j;
+          var output = '';
+          for(j = 0; j < param.length; j++) {
+            if(j > 0)
+              output += ',';
+            output += encodeURIComponent(param[j]);
+          }
+          queryParams += encodeURIComponent(param.name) + '=' + output;
         }
         else {
           if (typeof args[param.name] !== 'undefined') {
@@ -1081,7 +1083,7 @@
     var results = [];
     var i;
 
-    var headers = SwaggerRequest.prototype.setHeaders(args, {}, this);    
+    var headers = SwaggerRequest.prototype.setHeaders(args, {}, this);
     for(i = 0; i < this.parameters.length; i++) {
       var param = this.parameters[i];
       if(param.paramType && param.paramType === 'header' && args[param.name]) {
